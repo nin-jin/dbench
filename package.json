@@ -1,0 +1,25 @@
+{
+  "name": "dbench",
+  "version": "1.0.0",
+  "description": "Databases benchmark",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --harmony-proxies .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "batabase",
+    "benchmark",
+    "orientdb",
+    "mongodb",
+    "postgresql"
+  ],
+  "author": "jin",
+  "license": "ISC",
+  "dependencies": {
+    "console.table": "^0.4.0",
+    "mongodb": "^2.0.45",
+    "orientjs": "^2.1.0",
+    "pms": "^4.0.2"
+  }
+}
