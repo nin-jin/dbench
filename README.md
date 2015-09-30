@@ -5,6 +5,8 @@ Databases benchmark on NodeJS
 
 **mongodb-3.0.6** - enabled journaling, minimized sync frequency
 
+**nodejs-memory** - pojo in memory
+
 **orientdb-2.1.2-document** - used document api 
 
 ## Tests
