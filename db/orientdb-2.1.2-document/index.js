@@ -5,7 +5,6 @@ var await = require( 'pms' ).$jin.async2sync( function( promise , done ) {
 var db
 module.exports = {
 	init : function( ) {
-		if( db ) db.close()
 		db = require( 'orientjs' )({
 			host: 'localhost',
 			port: 2424,

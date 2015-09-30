@@ -4,7 +4,6 @@ var db
 var Comment
 module.exports = {
 	init : function( ) {
-		if( db ) db.close()
 		var client = require('mongodb').MongoClient
 		db = sync( client.connect )
 		.call( client , 'mongodb://localhost:27017/dbench' )

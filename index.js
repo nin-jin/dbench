@@ -38,4 +38,6 @@ require( 'pms' ).$jin.application( function( ){
 	console.table( Object.keys( bench ).map( function( dbName ) {
 		return bench[ dbName ]
 	}) )
+	
+	process.exit()
 } )

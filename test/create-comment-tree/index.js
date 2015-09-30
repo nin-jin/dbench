@@ -1,5 +1,19 @@
+var $jin = require( 'pms' ).$jin
 module.exports = {
-	run : function( db , result ) {
+	run : $jin.async2sync( function( db , result , done ) {
+		var results = []
+		var wait = 0
+		for( var i = 0 ; i < 10 ; ++i ) {
+			++wait
+			this.runOne( db , function( err , res ) {
+				if( err ) done( err , res )
+				results.push( res )
+				if( --wait ) return
+				done( null , res )
+			})
+		}
+	} ),
+	runOne : $jin.sync2async( function( db ) {
 		var comments = []
 		var count = 10000
 		var deep = 10 //Math.round( Math.sqrt( count ) )
@@ -11,5 +25,5 @@ module.exports = {
 			}
 		}
 		return [ comments[0] , comment ]
-	}
+	} )
 }
