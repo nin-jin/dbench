@@ -5,8 +5,8 @@ Databases benchmark on NodeJS
 
 ```
 db                       create-comment-tree  select-child-messages
------------------------  -------------------  --------------------
-mongodb-3.0.6            26337                56
-nodejs-memory            17                   1
-orientdb-2.1.2-document  15449                28
+-----------------------  -------------------  ---------------------
+mongodb-3.0.6            28129                59
+nodejs-memory            6                    0
+orientdb-2.1.2-document  15418                26
 ```
