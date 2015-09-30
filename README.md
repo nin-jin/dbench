@@ -4,7 +4,7 @@ Databases benchmark on NodeJS
 ## Results
 
 ```
-db                       create-comment-tree  select-child-mesages
+db                       create-comment-tree  select-child-messages
 -----------------------  -------------------  --------------------
 mongodb-3.0.6            26337                56
 nodejs-memory            17                   1
