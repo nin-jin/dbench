@@ -9,6 +9,7 @@ module.exports = {
 		.call( client , 'mongodb://localhost:27017/dbench' )
 		Comment = db.collection( 'Comment' )
 		sync( Comment.remove ).call( Comment , {} )
+		Comment.createIndex({ message : 1 })
 	} ,
 	insertComment : function( message , parent ) {
 		var data = { message : message , parent : parent , child : [] }
@@ -42,6 +43,22 @@ module.exports = {
 		
 		var messages = childs.map( function( child ){ 
 			return child.message
+		})
+		
+		return messages
+	} ,
+	selectMessagesGreater : function( val ) {
+		
+		var query = Comment.find( {
+			message : { $gt : val }
+		} , {
+			message : 1
+		} ).sort({ message : 1 }).limit( 100 )
+		
+		var docs = sync( query.toArray ).call( query ) 
+		
+		var messages = docs.map( function( doc ) {
+			return doc.message
 		})
 		
 		return messages

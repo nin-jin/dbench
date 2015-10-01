@@ -15,6 +15,7 @@ module.exports = {
 			'parent integer references Comment' +
 		')' )
 		query( 'create index on Comment (parent)' )
+		query( 'create index on Comment (message)' )
 	} ,
 	insertComment : function( message , parent ) {
 		var id = query(
@@ -27,6 +28,15 @@ module.exports = {
 		var messages = query(
 			'select message from Comment where parent = $1' ,
 			[ baseId ]
+		).rows.map( function( row ){
+			return row.message
+		})
+		return messages
+	} ,
+	selectMessagesGreater : function( val ) {
+		var messages = query(
+			'select message from Comment where message > $1 order by message limit 100' ,
+			[ val ]
 		).rows.map( function( row ){
 			return row.message
 		})

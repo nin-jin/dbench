@@ -29,6 +29,11 @@ module.exports = {
 			type : 'linklist' , 
 			linkedClass : 'Comment'
 		}) )
+		await( db.index.drop( 'Comment.message' ) )
+		await( db.index.create({
+			name: 'Comment.message',
+  			type: 'notunique'
+		}) )
 	} ,
 	insertComment : function( message , parent ) {
 		var data = { message : message , parent : parent }
@@ -45,6 +50,17 @@ module.exports = {
 	} ,
 	selectChildMessages : function( baseId ) {
 		return await( db.select( 'child.message' ).from( baseId ).one() ).child
+	} ,
+	selectMessagesGreater : function( val ) {
+		var query = db.query(
+			'select message from Comment where message > :val order by message limit 100' , 
+			{
+				params : { val : val }
+			}
+		)
+		return await( query.all() ).map( function( doc ) {
+			return doc.message
+		} )
 	} ,
 	complete : function() {
 		db.close()

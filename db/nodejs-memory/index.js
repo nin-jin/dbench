@@ -21,6 +21,9 @@ module.exports = {
 			return child.message
 		})
 	} ,
+	selectMessagesGreater : function( val ) {
+		return []
+	} ,
 	complete : function( ) {
 		Comment = null
 	}
