@@ -15,4 +15,6 @@ RUN link /usr/bin/nodejs /usr/bin/node
 ADD . /dbench/
 WORKDIR /dbench/
 
+RUN npm install
+
 ENTRYPOINT [ "npm" , "start" ]
