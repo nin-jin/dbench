@@ -8,5 +8,4 @@ docker rm -f dbench-postgres
 docker run -d -e POSTGRES_PASSWORD=postgres --name dbench-postgres postgres
 
 docker build -t dbench ./
-docker rm -f dbench
-docker run -t -i --link dbench-mongo --link dbench-orient --link dbench-postgres --name dbench dbench
+docker run -t -i --rm=true --link dbench-mongo --link dbench-orient --link dbench-postgres --name dbench dbench
