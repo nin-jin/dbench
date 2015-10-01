@@ -14,9 +14,8 @@ RUN mv -n bin/* /usr/bin
 
 # build application
 ADD ./package.json /dbench/package.json
-RUN cd /dbench/
+WORKDIR /dbench/
 RUN npm install
 ADD . /dbench/
-WORKDIR /dbench/
 
 ENTRYPOINT [ "npm" , "start" ]
