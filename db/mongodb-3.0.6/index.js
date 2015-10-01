@@ -6,7 +6,7 @@ module.exports = {
 	init : function( ) {
 		var client = require('mongodb').MongoClient
 		db = sync( client.connect )
-		.call( client , 'mongodb://localhost:27017/dbench' )
+		.call( client , 'mongodb://dbench-mongo:27017/dbench' )
 		Comment = db.collection( 'Comment' )
 		sync( Comment.remove ).call( Comment , {} )
 		Comment.createIndex({ message : 1 })

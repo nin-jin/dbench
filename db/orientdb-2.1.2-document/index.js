@@ -6,7 +6,7 @@ var db
 module.exports = {
 	init : function( ) {
 		db = require( 'orientjs' )({
-			host: 'localhost',
+			host: 'dbench-orient',
 			port: 2424,
 			username: 'root',
 			password: 'root'

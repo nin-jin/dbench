@@ -6,7 +6,7 @@ module.exports = {
 	init : function( ) {
 		var pg = require('pg')
 		db = sync( pg.connect )
-		.call( pg , 'postgres://postgres:postgres@localhost/dbench' )
+		.call( pg , 'postgres://postgres:postgres@dbench-postgres/dbench' )
 		query = sync( db.query ).bind( db ) 
 		query( 'drop table Comment' )
 		query( 'create table Comment (' +
