@@ -13,7 +13,7 @@ RUN cd iojs-v3.3.1-linux-x64
 RUN mv -n bin/* /usr/bin
 
 # build application
-ADD ./package.json /dbench/
+ADD ./package.json /dbench/package.json
 RUN cd /dbench/
 RUN npm install
 ADD . /dbench/
