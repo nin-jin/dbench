@@ -1,5 +1,22 @@
 # dbench
-Databases benchmark on NodeJS
+Databases benchmark on NodeJS + Docker
+
+## Start Up
+
+1. [install docker](https://docs.docker.com/installation/)
+
+2. checkout this repo
+
+```sh
+git clone https://github.com/nin-jin/dbench
+cd dbench
+```
+
+3. run
+
+```sh
+sh start.cmd
+```
 
 ## Databases
 
