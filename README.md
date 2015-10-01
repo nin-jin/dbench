@@ -22,7 +22,7 @@ Comment has
 	child is list of link to Comment
 ```
 
-Each of 10 roots have 1000 linear comment threads (10 depth) - 100K nodes.
+Each of 100 roots have 100 linear comment threads (10 depth) - 100K nodes.
 
 **select-child-messages** - selects message values from root childs.
 
