@@ -5,11 +5,19 @@ Databases benchmark on NodeJS
 
 **mongodb-3.0.6** - enabled journaling, minimized sync frequency.
 
+disk usage: 288MB
+
 **nodejs-memory** - pojo in memory.
+
+disk usage: 0
 
 **orientdb-2.1.2-document** - used document api. 
 
-**postgresql-9.4.4** - added index on "parent" field.
+disk usage: 105MB
+
+**postgresql-9.4.4** - no "child" field , added index on "parent" field.
+
+disk usage: 23MB
 
 ## Tests
 
@@ -35,8 +43,8 @@ Lower is better
 ```
 db                       create-comment-tree  select-child-messages  select-messages-greater
 -----------------------  -------------------  ---------------------  -----------------------
-mongodb-3.0.6            15720                186                    175
-nodejs-memory            16                   5                      5
-orientdb-2.1.2-document  11677                58                     399
-postgresql-9.4.4         6164                 80                     160
+mongodb-3.0.6            204861               495                    306
+nodejs-memory            106                  8                      5
+orientdb-2.1.2-document  141268               294                    458
+postgresql-9.4.4         136569               250                    261
 ```

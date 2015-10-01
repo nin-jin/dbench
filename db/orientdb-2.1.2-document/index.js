@@ -12,28 +12,14 @@ module.exports = {
 			password: 'root'
 		}).use( 'dbench' )
 		
-		await( db.class.drop( 'Comment' ) )
-		var Comment = await( db.class.create( 'Comment' ) )
+		await( db.query( 'drop index Comment.message' ) )
+		await( db.query( 'drop class Comment' ) )
 		
-		await( Comment.property.create({
-			name : 'message' ,
-			type : 'string'
-		}) )
-		await( Comment.property.create({
-			name : 'parent' , 
-			type : 'link' , 
-			linkedClass : 'Comment' 
-		}) )
-		await( Comment.property.create({
-			name : 'child' , 
-			type : 'linklist' , 
-			linkedClass : 'Comment'
-		}) )
-		await( db.index.drop( 'Comment.message' ) )
-		await( db.index.create({
-			name: 'Comment.message',
-  			type: 'notunique'
-		}) )
+		await( db.query( 'create class Comment' ) )
+		await( db.query( 'create property Comment.message string' ) )
+		await( db.query( 'create property Comment.parent link Comment' ) )
+		await( db.query( 'create property Comment.child linklist Comment' ) )
+		await( db.query( 'create index Comment.message notunique' ) )
 	} ,
 	insertComment : function( message , parent ) {
 		var data = { message : message , parent : parent }
