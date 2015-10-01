@@ -10,12 +10,12 @@ module.exports = {
 			port: 2424,
 			username: 'root',
 			password: 'root'
-		}).use( 'dbench-document' )
+		}).use( 'dbench-graph' )
 		
 		await( db.query( 'drop index Comment.message' ) )
-		await( db.query( 'drop class Comment' ) )
+		await( db.query( 'drop class Comment unsafe' ) )
 		
-		await( db.query( 'create class Comment' ) )
+		await( db.query( 'create class Comment extends V' ) )
 		await( db.query( 'create property Comment.message string' ) )
 		await( db.query( 'create property Comment.parent link Comment' ) )
 		await( db.query( 'create property Comment.child linklist Comment' ) )
@@ -25,7 +25,7 @@ module.exports = {
 		var data = { message : message , parent : parent }
 		
 		var query = db.let( 'child', function( db ) {
-			return db.insert().into( 'Comment' ).set( data )
+			return db.query( 'create vertex Comment set message = :message , parent = :parent ' , { params : data } )
 		} )
 		if( parent ) {
 			query = query.let( 'parent', 'update ' + parent + ' add child = $child' )

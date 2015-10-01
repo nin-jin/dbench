@@ -2,12 +2,14 @@ require('console.table')
 require( 'pms' ).$jin.application( function( ){
 	
 	var dbNames = require('fs').readdirSync( './db/' )
+	console.log( 'dbs : ' + dbNames.join( ' ' ) )
 	var dbs = {}
 	dbNames.forEach( function( name ) {
 		dbs[ name ] = require( './db/' + name )
 	} )
 	
 	var testNames = require('fs').readdirSync( './test/' )
+	console.log( 'tests : ' + testNames.join( ' ' ) )
 	var tests = {}
 	testNames.forEach( function( name ) {
 		tests[ name ] = require( './test/' + name )
