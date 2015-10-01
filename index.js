@@ -26,7 +26,7 @@ require( 'pms' ).$jin.application( function( ){
 			var start = Date.now()
 			var res = tests[ testName ].run( db , result[ dbName ] )
 			var time = Date.now() - start
-			console.log( dbName + ':' + testName + ':' , res )
+			//console.log( dbName + ' : ' + testName + ' : ' , res )
 			bench[ dbName ][ testName ] = time
 			result[ dbName ][ testName ] = res
 		}

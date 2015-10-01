@@ -9,13 +9,13 @@ module.exports = {
 				if( err ) done( err , res )
 				results.push( res )
 				if( --wait ) return
-				done( null , res )
+				done( null , results )
 			})
 		}
 	} ),
 	runOne : $jin.sync2async( function( db ) {
 		var comments = []
-		var count = 1000
+		var count = 100
 		var deep = 10 //Math.round( Math.sqrt( count ) )
 		for( var i = 0; i < count; ++i ) {
 			var comment = db.insertComment( "Hello " + i , comments[ comments.length - 1 ] )
