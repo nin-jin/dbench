@@ -12,10 +12,8 @@ RUN apt-get -qq -y install nodejs npm libkrb5-dev --fix-missing
 RUN link /usr/bin/nodejs /usr/bin/node
 
 # build application
-ADD ./package.json /dbench/
-RUN cd /dbench/
-RUN npm install
-ADD ./* /dbench/
+ADD . /dbench/
 WORKDIR /dbench/
+RUN npm install
 
 ENTRYPOINT [ "npm" , "start" ]
