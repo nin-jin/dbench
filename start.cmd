@@ -1,5 +1,5 @@
 docker rm -f dbench-mongo
-docker run -d --name dbench-mongo mongo
+docker run -d --name dbench-mongo mongo mongod --journalCommitInterval 2
 
 docker rm -f dbench-orient
 docker run -d -e ORIENTDB_ROOT_PASSWORD=root --name dbench-orient joaodubas/orientdb
