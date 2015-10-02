@@ -4,8 +4,7 @@ FROM ubuntu
 MAINTAINER jin <nin-jin@ya.ru>
 
 # install linux soft
-RUN apt-get -qq -y update
-RUN apt-get -qq -y upgrade
+RUN apt-get -qq -y update && apt-get -qq -y upgrade
 RUN apt-get -qq -y install wget xz-utils --fix-missing
 RUN wget https://iojs.org/dist/v3.3.1/iojs-v3.3.1-linux-x64.tar.xz
 RUN tar xf iojs-v3.3.1-linux-x64.tar.xz
