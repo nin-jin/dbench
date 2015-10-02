@@ -3,16 +3,16 @@ Databases benchmark on [NodeJS](https://nodejs.org/) + [Docker](https://docs.doc
 
 ## Start Up
 
-1. [Install Docker](https://docs.docker.com/installation/)
+* [Install Docker](https://docs.docker.com/installation/)
 
-2. Checkout this repo
+* Checkout this repo
 
 ```sh
 git clone https://github.com/nin-jin/dbench
 cd dbench
 ```
 
-3. Run
+* Run
 
 ```sh
 sh start.cmd
