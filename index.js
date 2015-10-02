@@ -23,7 +23,6 @@ with( require( 'pms' ) ) $jin.application( function( ){
 		tests[ path.basename( name , '.js' ) ] = require( './test/' + name )
 	} )
 	
-	console.log( '\n---[ test responses ]---\n' )
 	var bench = {}
 	var result = {}
 	for( var dbName in dbs ) {
@@ -64,7 +63,6 @@ with( require( 'pms' ) ) $jin.application( function( ){
 		
 	}
 	
-	console.log( '\n---[ test timings ]---\n' )
 	console.table( Object.keys( bench ).map( function( dbName ) {
 		return bench[ dbName ]
 	}) )
