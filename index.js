@@ -41,7 +41,7 @@ with( require( 'pms' ) ) $jin.application( function( ){
 				for( var i = 0 ; i < 100 ; ++i ) {
 					++wait
 					runOne( db , i , result[ dbName ] , function( err , res ) {
-						if( err ) done( err , res )
+						if( err ) return done( err , res )
 						results.push( res )
 						if( --wait ) return
 						done( null , results )
