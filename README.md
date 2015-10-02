@@ -59,6 +59,7 @@ Lower is better (ms)
 
 ### Case 1 - windows without virtualization
 
+```
 CPU: i7-2640M@2.8GHz
 OS: Windows 10
 Java: 1.8.0_60
@@ -67,7 +68,6 @@ NodeJS: 3.3.1
 OrientDB: 2.1.2
 PostgreSQL: 9.4.4
 
-```
 db               create-comment-tree  select-child-messages  select-messages-greater
 ---------------  -------------------  ---------------------  -----------------------
 mongo            345417               832                    435
