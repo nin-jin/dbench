@@ -8,7 +8,7 @@ RUN apt-get -qq -y update
 RUN apt-get -qq -y upgrade
 RUN apt-get -qq -y install software-properties-common --fix-missing
 RUN add-apt-repository ppa:dhor/myway
-RUN apt-get -qq -y install nodejs npm --fix-missing
+RUN apt-get -qq -y install nodejs npm libkrb5-dev --fix-missing
 RUN link /usr/bin/nodejs /usr/bin/node
 
 # build application
