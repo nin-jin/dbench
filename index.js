@@ -42,4 +42,6 @@ require( 'pms' ).$jin.application( function( ){
 	}) )
 	
 	process.exit()
+}, function( error ) {
+	console.log( error )
 } )
