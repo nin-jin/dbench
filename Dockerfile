@@ -13,8 +13,9 @@ RUN link /usr/bin/nodejs /usr/bin/node
 
 # build application
 ADD ./package.json /dbench/
-WORKDIR /dbench/
+RUN cd /dbench/
 RUN npm install
 ADD ./* /dbench/
+WORKDIR /dbench/
 
 ENTRYPOINT [ "npm" , "start" ]
