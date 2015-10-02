@@ -28,9 +28,13 @@ disk usage: 288MB
 
 disk usage: 0
 
-**[orient-document](http://orientdb.com/)** - used document api. 
+**[orient-document](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api)** - used document api. 
 
 disk usage: 105MB
+
+**[orient-graph](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#graph-api)** - used document api. 
+
+disk usage: 125MB
 
 **[postgres](http://www.postgresql.org/)** - no "child" field , added index on "parent" field.
 
@@ -74,10 +78,11 @@ PostgreSQL: 9.4.4
 ```
 db               create-comment-tree  select-child-messages  select-messages-greater
 ---------------  -------------------  ---------------------  -----------------------
-mongo            351163               581                    313
-node-memory      80                   6                      6
-orient-document  200550               584                    688
-postgres         162923               280                    255
+mongo            373491               663                    411
+node-memory      85                   7                      6
+orient-document  209306               592                    754
+orient-graph     403248               1060                   803
+postgres         198514               386                    326
 ```
 
 #### Config 2: 10 fibers * 100 branches * 10 depth = 10K records
