@@ -70,8 +70,8 @@ PostgreSQL: 9.4.4
 
 db               create-comment-tree  select-child-messages  select-messages-greater
 ---------------  -------------------  ---------------------  -----------------------
-mongo            345417               832                    435
-node-memory      95                   10                     7
-orient-document  199209               583                    1296
-postgres         164770               285                    296
+mongo            351163               581                    313
+node-memory      80                   6                      6
+orient-document  200550               584                    688
+postgres         162923               280                    255
 ```
