@@ -17,11 +17,11 @@
   "author": "jin",
   "license": "ISC",
   "dependencies": {
-    "colors": "^1.1.2",
-    "console.table": "^0.4.0",
-    "mongodb": "^2.0.45",
-    "orientjs": "^2.1.0",
-    "pg": "^4.4.2",
-    "pms": "^4.0.2"
+    "colors": "*",
+    "console.table": "*",
+    "mongodb": "*",
+    "orientjs": "*",
+    "pg": "*",
+    "pms": "*"
   }
 }
