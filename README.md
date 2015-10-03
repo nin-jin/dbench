@@ -42,7 +42,7 @@ disk usage: 125MB
 
 **[postgres](http://www.postgresql.org/)** - no "child" field , added index on "parent" field and "position" field to store childs order.
 
-disk usage: 23MB
+disk usage: 28MB
 
 ## Tests
 
