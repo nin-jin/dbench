@@ -14,13 +14,13 @@ module.exports = {
 		
 		try {
 			db = await( server.create({	
-				name :  'dbench-document',
-				type : 'docuemnt',
-				storage : 'plocal'
+				name :  'dbench-doc-mem',
+				type : 'document',
+				storage : 'memory'
 			}) )
 		} catch( error ) {
-			if( /^Database named 'dbench-document' already exists/.test( error.message ) ) {
-				db = server.use( 'dbench-document' )
+			if( /already exists/.test( error.message ) ) {
+				db = server.use( 'dbench-doc-mem' )
 			} else {
 				throw error
 			}
@@ -38,9 +38,7 @@ module.exports = {
 	insertComment : function( message , parent ) {
 		var data = { message : message , parent : parent }
 		
-		var query = db.let( 'child', function( db ) {
-			return db.insert().into( 'Comment' ).set( data )
-		} )
+		var query = db.let( 'child', 'insert into Comment content ' + JSON.stringify( data ) )
 		if( parent ) {
 			query = query.let( 'parent', 'update ' + parent + ' add child = $child' )
 		}

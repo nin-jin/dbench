@@ -20,7 +20,7 @@ sh start.cmd
 
 ## Databases
 
-**[mongo](https://www.mongodb.org/)** - enabled journaling, minimized sync frequency.
+**[mongo](https://www.mongodb.org/)** - enabled journaling, minimized sync frequency, transactions not supported
 
 disk usage: 288MB
 
@@ -28,7 +28,11 @@ disk usage: 288MB
 
 disk usage: 0
 
-**[orient-document](http://orientdb.com/)** - used [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api). 
+**[orient-doc-mem](http://orientdb.com/)** - used [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api), in memory. 
+
+disk usage: 0
+
+**[orient-doc](http://orientdb.com/)** - used [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api). 
 
 disk usage: 105MB
 
@@ -59,7 +63,19 @@ Each of 100 roots have 100 linear comment threads (10 depth) - 100K nodes.
 
 ## Results
 
-Lower is better (ms)
+Lower is better in all tables
+
+#### Code complexity
+
+```
+db               create-comment-tree  select-child-messages  select-messages-greater
+---------------  -------------------  ---------------------  -----------------------
+mongo            high                 high                   high
+node             low                  low                    ---
+orient-doc       high                 low                    high
+orient-graph     high                 low                    high
+postgres         high                 high                   high
+```
 
 ### System 1: windows without virtualization
 
@@ -76,13 +92,14 @@ PostgreSQL: 9.4.4
 #### Config 1: 100 fibers * 100 branches * 10 depth = 100K records
 
 ```
-db               create-comment-tree  select-child-messages  select-messages-greater
----------------  -------------------  ---------------------  -----------------------
-mongo            373491               663                    411
-node-memory      85                   7                      6
-orient-document  209306               592                    754
-orient-graph     403248               1060                   803
-postgres         198514               386                    326
+db              create-comment-tree  select-child-messages  select-messages-greater
+--------------  -------------------  ---------------------  -----------------------
+mongo           395776               1142                   479
+node-mem        86                   8                      5
+orient-doc-mem  199459               771                    1032
+orient-doc      224250               784                    1044
+orient-graph    448189               1399                   885
+postgres        233627               301                    296
 ```
 
 #### Config 2: 10 fibers * 100 branches * 10 depth = 10K records

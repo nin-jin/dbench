@@ -14,38 +14,40 @@ module.exports = {
 		
 		try {
 			db = await( server.create({	
-				name :  'dbench-graph',
-				type : 'graph',
+				name :  'dbench-document',
+				type : 'document',
 				storage : 'plocal'
 			}) )
 		} catch( error ) {
 			if( /already exists/.test( error.message ) ) {
-				db = server.use( 'dbench-graph' )
+				db = server.use( 'dbench-document' )
 			} else {
 				throw error
 			}
 		}
 		
 		await( db.query( 'drop index Comment.message' ) )
-		await( db.query( 'drop class ReplyTo unsafe' ) )
-		await( db.query( 'drop class Comment unsafe' ) )
+		await( db.query( 'drop class Comment' ) )
 		
-		await( db.query( 'create class Comment extends V' ) )
+		await( db.query( 'create class Comment' ) )
 		await( db.query( 'create property Comment.message string' ) )
+		await( db.query( 'create property Comment.parent link Comment' ) )
+		await( db.query( 'create property Comment.child linklist Comment' ) )
 		await( db.query( 'create index Comment.message notunique' ) )
-		await( db.query( 'create class ReplyTo extends E' ) )
 	} ,
 	insertComment : function( message , parent ) {
-		var query = db.let( 'child', 'create vertex Comment set message = ' + JSON.stringify( message ) )
+		var data = { message : message , parent : parent }
+		
+		var query = db.let( 'child', 'insert into Comment content ' + JSON.stringify( data ) )
 		if( parent ) {
-			query = query.let( 'relation', 'create edge ReplyTo from $child to ' + parent )
+			query = query.let( 'parent', 'update ' + parent + ' add child = $child' )
 		}
 		query.commit(100).return( '$child.@rid' )
 		
 		return await( query.one() )['@rid']
 	} ,
 	selectChildMessages : function( baseId ) {
-		return await( db.query( 'select in( ReplyTo ).message from ' + baseId ) )[0].in
+		return await( db.select( 'child.message' ).from( baseId ).one() ).child
 	} ,
 	selectMessagesGreater : function( val ) {
 		var query = db.query(
