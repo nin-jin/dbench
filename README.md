@@ -28,11 +28,11 @@ disk usage: 288MB
 
 disk usage: 0
 
-**[orient-document](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api)** - used document api. 
+**[orient-document](http://orientdb.com/)** - used [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api). 
 
 disk usage: 105MB
 
-**[orient-graph](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#graph-api)** - used document api. 
+**[orient-graph](http://orientdb.com/)** - used [graph api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#graph-api). 
 
 disk usage: 125MB
 
