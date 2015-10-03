@@ -24,7 +24,7 @@ sh start.cmd
 
 disk usage: 288MB
 
-**[node-memory](https://nodejs.org/)** - pojo in memory.
+**[node-mem](https://nodejs.org/)** - pojo in memory.
 
 disk usage: 0
 
