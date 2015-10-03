@@ -36,7 +36,7 @@ disk usage: 105MB
 
 disk usage: 125MB
 
-**[postgres](http://www.postgresql.org/)** - no "child" field , added index on "parent" field.
+**[postgres](http://www.postgresql.org/)** - no "child" field , added index on "parent" field and "position" field to store childs order.
 
 disk usage: 23MB
 
