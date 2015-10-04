@@ -20,27 +20,27 @@ sh start.cmd
 
 ## Databases
 
-**[mongo](https://www.mongodb.org/)** - enabled journaling, minimized sync frequency, transactions not supported
+**[mongo](./db/mongo.js)** - [MongoDB](https://www.mongodb.org/) with enabled journaling, minimized sync frequency, transactions not supported.
 
 disk usage: 288MB
 
-**[node-mem](https://nodejs.org/)** - pojo in memory.
+**[node-mem](./db/node-mem.js)** - [NodeJS](https://nodejs.org/) with pojo in memory, as reference.
 
 disk usage: 0
 
-**[orient-doc-mem](http://orientdb.com/)** - used [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api), in memory. 
+**[orient-doc-mem](./db/orient-doc-mem.js)** - [OrientDB](http://orientdb.com/) with [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api), in memory. 
 
 disk usage: 0
 
-**[orient-doc](http://orientdb.com/)** - used [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api). 
+**[orient-doc](./db/orient-doc.js)** - [OrientDB](http://orientdb.com/) with [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api). 
 
 disk usage: 105MB
 
-**[orient-graph](http://orientdb.com/)** - used [graph api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#graph-api). 
+**[orient-graph](./db/orient-graph.js)** - [OrientDB](http://orientdb.com/) with [graph api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#graph-api). 
 
 disk usage: 125MB
 
-**[postgres](http://www.postgresql.org/)** - no "child" field , added index on "parent" field and "position" field to store childs order.
+**[postgres](./db/postgres.js)** - [PostgreSQL](http://www.postgresql.org/) without "child" field , but with "position" field to store childs order, added index on "parent"+"position" fields.
 
 disk usage: 28MB
 
