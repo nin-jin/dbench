@@ -4,9 +4,8 @@ Databases benchmark on [NodeJS](https://nodejs.org/)
 
 ## Databases
 
-**[orient](./db/orient.js)** - [OrientDB](http://orientdb.com/) with document api. 
-
-**[postgres](./db/postgres.js)** - [PostgreSQL](http://www.postgresql.org/) with ltree.
+- **[orient](./db/orient.js)** - [OrientDB](http://orientdb.com/) using document api. 
+- **[postgres](./db/postgres.js)** - [PostgreSQL](http://www.postgresql.org/).
 
 ## Tests
 
