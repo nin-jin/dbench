@@ -10,7 +10,7 @@ Databases benchmark on [NodeJS](https://nodejs.org/)
 
 ## Tests
 
-**[create-comment-tree](./test/create_comment_tree.js)** - creates comment tree with scheme:
+**[create_comment_tree](./test/create_comment_tree.js)** - creates comment tree with scheme:
 
 ```json
 Comment has
@@ -25,25 +25,11 @@ Each of 100 roots have 10 linear comment threads (100 depth) - 100K comments.
 
 **[select_descendant_messages](./test/select_descendant_messages.js)** - selects message values from root comments and its subtree.
 
-**[select_messages_greater](./test/select_messages_reater.js)** - limited select by text index and order by it.
+**[select_messages_greater](./test/select_messages_greater.js)** - limited select by text index and order by it.
 
 ## Results
 
-Lower is better in all tables
-
-#### Code complexity
-
-```
-db               create-comment-tree  select-child-messages  select-messages-greater
----------------  -------------------  ---------------------  -----------------------
-mongo            high                 high                   high
-node             low                  low                    ---
-orient-doc       high                 low                    high
-orient-graph     high                 low                    high
-postgres         high                 high                   high
-```
-
-### Results
+### Performance
 
 ```
 CPU: i7-6500M@2.5GHz
@@ -72,3 +58,5 @@ db        create_comment_tree  select_child_messages  select_descendant_messages
 postgres  63646                53                     3168                        1452
 orient    90688                78                     3969                        2821
 ```
+
+Lower is better in all tables
