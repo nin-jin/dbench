@@ -1,71 +1,53 @@
 require('console.table')
-var path = require( 'path' )
 
-var sleep = require( 'pms' ).$jin.async2sync( function( delay , done ) {
-	setTimeout( function() { done() } , delay * 1000 )
-})
+const config = require( './config' )
+console.log( 'config ', config  )
 
-with( require( 'pms' ) ) $jin.application( function( ){
-	
-	var dbNames = require('fs').readdirSync( './db/' )
-	console.log( 'dbs : ' + dbNames.join( ' ' ) )
-	var dbs = {}
-	dbNames.forEach( function( name ) {
-		if( path.extname( name ) !== '.js' ) return
-		dbs[ path.basename( name , '.js' ) ] = require( './db/' + name )
-	} )
-	
-	var testNames = require('fs').readdirSync( './test/' )
-	console.log( 'tests : ' + testNames.join( ' ' ) )
-	var tests = {}
-	testNames.forEach( function( name ) {
-		if( path.extname( name ) !== '.js' ) return
-		tests[ path.basename( name , '.js' ) ] = require( './test/' + name )
-	} )
-	
-	var bench = {}
-	var result = {}
-	for( var dbName in dbs ) {
-		var db = dbs[ dbName ]
-		bench[ dbName ] = { db : dbName }
-		result[ dbName ] = {}
-		db.init()
-		sleep( 1 )
+const sleep = ()=> new Promise( done => setTimeout( done() , 1000 ) )
+
+void ( async()=> {
+
+	const bench = {}
+	const result = {}
+
+	for( const db_name of Object.keys( config.db ) ) {
+		console.log('')
+
+		const db = require( `./db/${db_name}.js` )
 		
-		for( var testName in tests ) {
-			sleep( 1 )
+		bench[ db_name ] = { db : db_name }
+		result[ db_name ] = {}
+		
+		await db.init( config.db[ db_name ] )
+		
+		for( const test_name of config.test ) {
 			
-			var runAll = $jin.async2sync( function( done ) {
-				var results = []
-				var wait = 0
-				for( var i = 0 ; i < 100 ; ++i ) {
-					++wait
-					runOne( db , i , result[ dbName ] , function( err , res ) {
-						if( err ) return done( err , res )
-						results.push( res )
-						if( --wait ) return
-						done( null , results )
-					})
-				}
-			} )
+			await sleep()
+
+			const test = require( `./test/${test_name}.js` )
 			
-			var runOne = $jin.sync2async( tests[ testName ].run ).bind( tests[ testName ] )
+			const results = []
 			
-			var start = Date.now()
-			var res = runAll()
-			var time = Date.now() - start
-			bench[ dbName ][ testName ] = time
-			result[ dbName ][ testName ] = res
-			console.log( dbName , testName , time )
+			let time = - Date.now()
+			for( let thread = 0 ; thread < config.thread.count ; ++thread ) {
+				results.push( test.run( db , thread , config, result[ db_name ] ) )
+			}
+
+			result[ db_name ][ test_name ] = await Promise.all( results )
+			
+			time += Date.now()
+			bench[ db_name ][ test_name ] = time
+			
+			console.log( db_name , test_name , time )
 		}
 		
-		db.complete()
+		await db.complete()
 		
 	}
+
+	// console.log( result )
 	
-	console.table( Object.keys( bench ).map( function( dbName ) {
-		return bench[ dbName ]
-	}) )
-	
-	process.exit()
-} )
+	console.log( '' )
+	console.table( Object.keys( bench ).map( dbName => bench[ dbName ] ) )
+
+})()

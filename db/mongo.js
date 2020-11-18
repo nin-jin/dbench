@@ -1,21 +1,23 @@
-var sync = require( 'pms' ).$jin.async2sync
-
 var db
 var Comment
+
 module.exports = {
-	init : function( ) {
+
+	async init() {
 		var client = require('mongodb').MongoClient
-		db = sync( client.connect )
-		.call( client , 'mongodb://dbench-mongo:27017/dbench' )
+		db = await client.connect( 'mongodb://localhost:27017/dbench' )
 		Comment = db.collection( 'Comment' )
-		sync( Comment.remove ).call( Comment , {} )
+		await Comment.remove({})
 		Comment.createIndex({ message : 1 })
-	} ,
-	insertComment : function( message , parent ) {
+	},
+
+	async insertComment( message , parent ) {
+
 		var data = { message : message , parent : parent , child : [] }
-		var id = sync( Comment.insert ).call( Comment , data ).ops[0]._id
+		var id = await Comment.insert( data ).ops[0]._id
+		
 		if( parent ) {
-			sync( Comment.updateOne ).call( Comment , {
+			await Comment.updateOne( {
 				_id : parent 
 			} , {
 				$push : { child : id }
@@ -24,10 +26,13 @@ module.exports = {
 				wtimeout : 100
 			} )
 		}
+		
 		return id
-	} ,
-	selectChildMessages : function( baseId ) {
-		var ids = sync( Comment.findOne ).call( Comment , {
+	},
+
+	async selectChildMessages( baseId ) {
+		
+		var ids = await Comment.findOne( {
 			_id : baseId
 		} , {
 			child : 1
@@ -39,15 +44,14 @@ module.exports = {
 			message : 1
 		} )
 		
-		var childs = sync( query.toArray ).call( query ) 
+		var childs = await query.toArray()
 		
-		var messages = childs.map( function( child ){ 
-			return child.message
-		})
+		var messages = childs.map( child => child.message )
 		
 		return messages
-	} ,
-	selectMessagesGreater : function( val ) {
+	},
+
+	async selectMessagesGreater( val ) {
 		
 		var query = Comment.find( {
 			message : { $gt : val }
@@ -55,17 +59,17 @@ module.exports = {
 			message : 1
 		} ).sort({ message : 1 }).limit( 100 )
 		
-		var docs = sync( query.toArray ).call( query ) 
+		var docs = await query.toArray()
 		
-		var messages = docs.map( function( doc ) {
-			return doc.message
-		})
+		var messages = docs.map( doc => doc.message )
 		
 		return messages
-	} ,
-	complete : function() {
+	},
+
+	async complete() {
 		db.close()
 		db = null
 		Comment = null
-	}
+	},
+
 }

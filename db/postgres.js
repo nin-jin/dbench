@@ -1,58 +1,137 @@
-var sync = require( 'pms' ).$jin.async2sync
+const { Pool } = require('pg')
 
-var db
-var query
-module.exports = {
-	init : function( ) {
-		var pg = require('pg')
-		db = sync( pg.connect )
-		.call( pg , 'postgres://postgres:postgres@dbench-postgres/postgres' )
-		query = sync( db.query ).bind( db )
-		try {
-			query( 'drop table Comment' )
-		} catch( error ) {}
-		query( 'create table Comment (' +
-			'id serial PRIMARY KEY,' +
-			'message text,' +
-			'parent integer references Comment,' +
-			'position integer' +
-		')' )
-		query( 'create index on Comment (parent,position)' )
-		query( 'create index on Comment (message)' )
-	} ,
-	insertComment : function( message , parent ) {
-		if( parent ) {
-			return query(
-				'insert into Comment (message, parent, position) values ( $1 , $2, ( select count(*) from Comment where parent = $2 ) ) returning id' ,
-				[ message , parent || null ]  
-			).rows[0].id
-		} else {
-			return query(
-				'insert into Comment (message, parent, position) values ( $1 , null, 0 ) returning id' ,
-				[ message ]  
-			).rows[0].id
-		}
-	} ,
-	selectChildMessages : function( baseId ) {
-		var messages = query(
-			'select message from Comment where parent = $1 order by position' ,
-			[ baseId ]
-		).rows.map( function( row ){
-			return row.message
-		})
-		return messages
-	} ,
-	selectMessagesGreater : function( val ) {
-		var messages = query(
-			'select message from Comment where message > $1 order by message limit 100' ,
-			[ val ]
-		).rows.map( function( row ){
-			return row.message
-		})
-		return messages
-	} ,
-	complete : function() {
-		db.end()
-		db = null
+const Try = async( cb )=> {
+	try {
+		return await cb()
+	} catch( error ) {
+		console.error( error.message )
 	}
+}
+
+const pool = new Pool({
+	user: 'postgres',
+	password: 'root',
+	host: 'localhost',
+	database: 'dbench2',
+	port: 5432,
+})
+
+module.exports = {
+
+	async init( config ) {
+
+		await Try( ()=> pool.query( 'drop table Comment' ) )
+
+		await pool.query( `CREATE EXTENSION IF NOT EXISTS ltree` )
+		
+		await pool.query(`
+			create table Comment (
+				id serial PRIMARY KEY,
+				message text,
+				parent integer references Comment,
+				path ltree
+			)
+		`)
+
+		await pool.query( `create index on Comment using GIST ( path )` )
+		await pool.query( `create index on Comment ( parent, id )` )
+		await pool.query( `create index on Comment ( message, id )` )
+
+	},
+
+	async insertComment( message , parent ) {
+
+		if( parent ) {
+
+			const res = await pool.query(
+				`
+					insert into Comment (message, parent, path)
+					values ( $1, $2, ( select path from Comment where id = $2 ) || $2::text )
+					returning id
+				`,
+				[ message , parent || null ]  
+			)
+			return res.rows[0].id
+
+		} else {
+
+			const res = await pool.query(
+				`
+					insert into Comment (message, parent, path)
+					values ( $1, null, 'root' )
+					returning id
+				` ,
+				[ message ]  
+			)
+			return res.rows[0].id
+
+		}
+
+	},
+
+	async selectChildMessages( baseId ) {
+
+		const res = await pool.query(
+			`
+				select message
+				from Comment
+				where parent = $1
+				order by id asc
+			` ,
+			[ baseId ]
+		)
+		
+		return res.rows.map( row => row.message )
+	},
+	
+	async selectDescendantMessages( baseId ) {
+
+		const res = await pool.query(
+			`
+				with Parent as (
+					select
+						( path || $1::text ) as path,
+						message
+					from Comment
+					where id = $1::int
+				) 
+				(
+					select message
+					from Parent
+				) union (
+					select message
+					from Comment
+					where path <@ (
+						select path
+						from Parent
+					)
+					order by id asc
+				)
+			` ,
+			[ baseId ]
+		)
+		
+		return res.rows.map( row => row.message )
+	},
+	
+	async selectMessagesGreater( val, limit ) {
+
+		const res = await pool.query(
+			`
+				select message
+				from Comment
+				where message > $1
+				order by message
+				limit $2
+			` ,
+			[ val, limit ]
+		)
+		
+		return res.rows.map( row => row.message )
+	},
+
+	async complete() {
+		await pool.end()
+	},
+
 }

@@ -4,7 +4,7 @@
   "description": "Databases benchmark",
   "main": "index.js",
   "scripts": {
-    "start": "node --harmony-proxies .",
+    "start": "node --unhandled-rejections=strict .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -17,11 +17,10 @@
   "author": "jin",
   "license": "ISC",
   "dependencies": {
-    "colors": "*",
+    "@types/pg": "^7.14.5",
     "console.table": "*",
     "mongodb": "*",
     "orientjs": "*",
-    "pg": "*",
-    "pms": "*"
+    "pg": "*"
   }
 }

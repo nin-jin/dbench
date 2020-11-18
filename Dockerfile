@@ -1,7 +1,7 @@
 # BUILD: docker build -t dbench:dbench ./
 # RUN: docker run -t -d -i --link db:db dbench:dbench
 FROM ubuntu
-MAINTAINER jin <nin-jin@ya.ru>
+LABEL jin <nin-jin@ya.ru>
 
 # install linux soft
 RUN apt-get -qq -y update

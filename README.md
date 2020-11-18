@@ -1,52 +1,16 @@
 # dbench
-Databases benchmark on [NodeJS](https://nodejs.org/) + [Docker](https://docs.docker.com/)
 
-## Start Up
-
-* [Install Docker](https://docs.docker.com/installation/)
-
-* Checkout this repo
-
-```sh
-git clone https://github.com/nin-jin/dbench
-cd dbench
-```
-
-* Run
-
-```sh
-sh start.cmd
-```
+Databases benchmark on [NodeJS](https://nodejs.org/)
 
 ## Databases
 
-**[mongo](./db/mongo.js)** - [MongoDB](https://www.mongodb.org/) with enabled journaling, minimized sync frequency, transactions not supported.
+**[orient](./db/orient.js)** - [OrientDB](http://orientdb.com/) with document api. 
 
-disk usage: 288MB
-
-**[node-mem](./db/node-mem.js)** - [NodeJS](https://nodejs.org/) with pojo in memory, as reference.
-
-disk usage: 0
-
-**[orient-doc-mem](./db/orient-doc-mem.js)** - [OrientDB](http://orientdb.com/) with [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api), in memory. 
-
-disk usage: 0
-
-**[orient-doc](./db/orient-doc.js)** - [OrientDB](http://orientdb.com/) with [document api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#document-api). 
-
-disk usage: 105MB
-
-**[orient-graph](./db/orient-graph.js)** - [OrientDB](http://orientdb.com/) with [graph api](http://orientdb.com/docs/2.1/Choosing-between-Graph-or-Document-API.html#graph-api). 
-
-disk usage: 125MB
-
-**[postgres](./db/postgres.js)** - [PostgreSQL](http://www.postgresql.org/) without "child" field , but with "position" field to store childs order, added index on "parent"+"position" fields.
-
-disk usage: 28MB
+**[postgres](./db/postgres.js)** - [PostgreSQL](http://www.postgresql.org/) with ltree.
 
 ## Tests
 
-**[create-comment-tree](./test/create-comment-tree.js)** - creates comment tree with scheme:
+**[create-comment-tree](./test/create_comment_tree.js)** - creates comment tree with scheme:
 
 ```json
 Comment has
@@ -55,11 +19,13 @@ Comment has
 	child is list of link to Comment
 ```
 
-Each of 100 roots have 100 linear comment threads (10 depth) - 100K nodes.
+Each of 100 roots have 10 linear comment threads (100 depth) - 100K comments.
 
-**[select-child-messages](./test/select-child-messages.js)** - selects message values from root childs.
+**[select_child_messages](./test/select_child_messages.js)** - selects message values from root comments.
 
-**[select-messages-greater](./test/select-messages-greater.js)** - limited select and order by index.
+**[select_descendant_messages](./test/select_descendant_messages.js)** - selects message values from root comments and its subtree.
+
+**[select_messages_greater](./test/select_messages_reater.js)** - limited select by text index and order by it.
 
 ## Results
 
@@ -77,61 +43,32 @@ orient-graph     high                 low                    high
 postgres         high                 high                   high
 ```
 
-### System 1: windows without virtualization
+### Results
 
 ```
-CPU: i7-2640M@2.8GHz
+CPU: i7-6500M@2.5GHz
 OS: Windows 10
-Java: 1.8.0_60
-MongoDB: 3.0.6
-NodeJS: 3.3.1
-OrientDB: 2.1.2
-PostgreSQL: 9.4.4
+Java: 1.8.0_271
+NodeJS: 14.12.0
+OrientDB: 3.1.4
+PostgreSQL: 13.0
 ```
 
-#### Config 1: 100 fibers * 100 branches * 10 depth = 100K records
-
 ```
-db              create-comment-tree  select-child-messages  select-messages-greater
---------------  -------------------  ---------------------  -----------------------
-mongo           395776               1142                   479
-node-mem        86                   8                      5
-orient-doc-mem  199459               771                    1032
-orient-doc      224250               784                    1044
-orient-graph    448189               1399                   885
-postgres        233627               301                    296
-```
+config  {
+  db: { postgres: {}, orient: {} },
+  test: [
+    'create_comment_tree',
+    'select_child_messages',
+    'select_descendant_messages',
+    'select_messages_greater'
+  ],
+  thread: { count: 100 },
+  comment: { branch: { count: 10, depth: 100 } }
+}
 
-#### Config 2: 10 fibers * 100 branches * 10 depth = 10K records
-
+db        create_comment_tree  select_child_messages  select_descendant_messages  select_messages_greater
+--------  -------------------  ---------------------  --------------------------  -----------------------
+postgres  63646                53                     3168                        1452
+orient    90688                78                     3969                        2821
 ```
-db               create-comment-tree  select-child-messages  select-messages-greater
----------------  -------------------  ---------------------  -----------------------
-mongo            25102                53                     20
-node-memory      5                    1                      0
-orient-document  13857                47                     67
-postgres         7898                 20                     18
-```
-
-#### Config 3: 100 fibers * 100 branches * 1 depth = 10K records
-
-```
-db               create-comment-tree  select-child-messages  select-messages-greater
----------------  -------------------  ---------------------  -----------------------
-mongo            25214                629                    263
-node-memory      15                   7                      3
-orient-document  12622                445                    613
-postgres         9060                 129                    141
-```
-
-#### Config 4: 100 fibers * 10 branches * 10 depth = 10K records
-
-```
-db               create-comment-tree  select-child-messages  select-messages-greater
----------------  -------------------  ---------------------  -----------------------
-mongo            28647                248                    232
-node-memory      19                   6                      5
-orient-document  17568                149                    740
-postgres         9599                 146                    184
-```
-
